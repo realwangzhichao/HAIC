@@ -40,3 +40,16 @@ The first public update ships the asset module under `active_adaptation/assets`:
 ## Acknowledgments
 
 This repository is built on top of [HDMI: Learning Interactive Humanoid Whole-Body Control from Human Videos](https://github.com/LeCAR-Lab/HDMI). We thank the authors for open-sourcing their work.
+
+## Citation
+
+If you find our work useful for your research, please consider citing us:
+
+```bibtex
+@article{li2026haic,
+  title = {HAIC: Humanoid Agile Object Interaction Control via Dynamics-Aware World Model},
+  author = {Li, Dongting and Chen, Xingyu and Wu, Qianyang and Chen, Bo and Wu, Sikai and Wu, Hanyu and Zhang, Guoyao and Li, Liang and Zhou, Mingliang and Xiang, Diyun and Ma, Jianzhu and Zhang, Qiang and Xu, Renjing},
+  journal = {arXiv preprint arXiv:2602.11758},
+  year = {2026}
+}
+```
