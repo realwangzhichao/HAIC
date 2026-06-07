@@ -1,0 +1,154 @@
+# @package task
+defaults:
+  - base/hdmi-base
+  - _self_
+
+name: G1BoxSlopeStair
+
+viewer:
+  env_spacing: 5.0
+  lookat: [0.5, -2.5, 0.8]
+  eye: [3, 2, 1.]
+
+terrain: plane
+
+robot:
+  name: g1
+  robot_type: g1_29dof_rubberhand-feet_box-eef_box-body_capsule
+
+command:
+  # data_path: data/motion/g1/mybox/box_1
+  data_path: data/motion/g1/mirobotA/box_slopestair
+  root_body_name: "pelvis"
+
+  replay_motion: False
+
+  reset_range: [0, 100]
+
+  object_asset_name: "mybox"
+  object_body_name:  "mybox"
+
+  object_pose_range:
+    x: [-0.05, 0.05]
+    y: [-0.05, 0.05]
+    z: [-0.01, 0.01]
+    # roll: [-0.1, 0.1]
+    # pitch: [-0.1, 0.1]
+    yaw: [-0.15, 0.15]
+
+  contact_eef_pos_offset:
+    - [0.05, 0.0, 0.0]  # left wrist
+    - [0.05, 0.0, 0.0]  # right wrist
+  contact_target_pos_offset:
+    - [-0.05, 0.18, 0.03]  # left wrist
+    - [-0.05,-0.18, 0.03]  # right wrist
+
+  extra_object_names: ["stairslope"]
+  
+  extra_object_pose_range:
+    x: [-0.50, 1.25] #[-0.10, 0.25]
+    y: [-0.15, 0.15]
+    z: [-0.01, 0.01]
+    # roll: [-0.1, 0.1]
+    # pitch: [-0.1, 0.1]
+    yaw: [-3.14, 3.14]
+
+
+observation:
+  object_:
+    object_com_vel_b:   {}
+    object_com_acc_b:   {}
+    object_pos_b:    {}
+    object_ori_b:    {}
+    extra_object_pos_b:    {}
+    extra_object_ori_b:    {}
+  object_geo_:
+    object_points:    {}
+    extra_object_points:    {}
+
+randomization:
+  object_body_randomization:
+    static_dynamic_friction_ratio_range: [1.0, 2.0]
+    dynamic_friction_range: [0.3, 0.8]
+    restitution_range: [0.0, 0.2]
+    mass_range: [1.0, 1.8]
+  
+  body_scale:
+    name: ["mybox", "stairslope"]
+    scale_range: [[0.9, 1.1], [0.98, 1.02]]
+
+  push:
+    body_names: ["torso_link"]
+    decay: 0.5
+    force_range: [0.01, 0.20]
+    min_interval: 200 
+
+reward:
+  tracking:
+    tracking_upper_body_pos(keypoint_pos_tracking_local_product):
+      body_names: [".*_shoulder_pitch_link", ".*_elbow_link", ".*_wrist_yaw_link"]
+      weight: 1.0
+      sigma: 0.5
+    tracking_upper_body_ori(keypoint_ori_tracking_local_product):
+      body_names: [".*_shoulder_pitch_link", ".*_elbow_link", ".*_wrist_yaw_link"]
+      weight: 1.0
+      sigma: 1.0
+
+    tracking_lower_body_pos(keypoint_pos_tracking_local_product):
+      body_names: [".*_hip_pitch_link", ".*_knee_link", ".*_ankle_roll_link"]
+      weight: 0.5
+      sigma: 0.5
+    tracking_lower_body_ori(keypoint_ori_tracking_local_product):
+      body_names: [".*_hip_pitch_link", ".*_knee_link", ".*_ankle_roll_link"]
+      weight: 0.5
+      sigma: 1.0
+
+    tracking_root_XYpos(keypoint_XYpos_tracking_product):
+      body_names: ["pelvis"]
+      weight: 1.0
+      sigma: 0.5
+    # tracking_root_pos(keypoint_pos_tracking_product):
+    #   body_names: ["pelvis"]
+    #   weight: 0.25
+    #   sigma: 0.5
+    tracking_root_ori(keypoint_ori_tracking_product):
+      body_names: ["pelvis"]
+      weight: 0.5
+      sigma: 0.5
+
+    tracking_body_XYlinvel(keypoint_lin_XYvel_tracking_product):
+      body_names: ["pelvis", ".*_hip_yaw_link", ".*_knee_link", "torso_link", ".*_shoulder_pitch_link", ".*_elbow_link", ".*_wrist_yaw_link"]
+      weight: 0.5
+      sigma: 0.5
+    # tracking_body_linvel(keypoint_lin_vel_tracking_product):
+    #   body_names: ["pelvis", ".*_hip_yaw_link", ".*_knee_link", ".*_ankle_roll_link", "torso_link", ".*_shoulder_pitch_link", ".*_elbow_link", ".*_wrist_yaw_link"]
+    #   weight: 0.25
+    #   sigma: 0.5
+    tracking_body_angvel(keypoint_ang_vel_tracking_product):
+      body_names: ["pelvis", ".*_hip_yaw_link", ".*_knee_link", ".*_ankle_roll_link", "torso_link", ".*_shoulder_pitch_link", ".*_elbow_link", ".*_wrist_yaw_link"]
+      weight: 0.5
+      sigma: 2.5
+
+    joint_pos_tracking_product:
+      joint_names: ["waist_.*_joint", ".*_hip_.*_joint", ".*_knee_joint", ".*_shoulder_.*_joint", ".*_elbow_joint"]
+      weight: 0.5
+      sigma: 0.25
+    joint_vel_tracking_product:
+      joint_names: ["waist_.*_joint", ".*_hip_.*_joint", ".*_knee_joint", ".*_shoulder_.*_joint", ".*_elbow_joint"]
+      weight: 0.5
+      sigma: 2.5
+
+  object_tracking:
+    # _multiplicative: true
+    object_pos_tracking: {weight: 0.25, enabled: true}
+    object_XYpos_tracking: {weight: 1.0, sigma: 0.5}
+    object_ori_tracking: {weight: 1.0, sigma: 0.5}
+    eef_contact_exp:     {weight: 1.0, enabled: true, pos_sigma: 0.3, frc_sigma: 40.0, frc_thres: 10.0, gain: 5.0}
+  
+  feet:
+    feet_air_time:      {weight: 1.0, enabled: true, body_names: .*ankle_roll_link, thres: 0.3, soft_discount: 1.0}
+    feet_air_lift:      {weight: 1.0, enabled: true, body_names: .*ankle_roll_link, low_thres: 0.12, high_thres: 0.15, sigma: 0.25}
+    feet_contact:       {weight: 1.0, enabled: true, body_names: .*ankle_roll_link, sigma: 0.25}
+  loco:
+    joint_pos_limits:   {weight: 15.0, joint_names: ".*", soft_factor: 0.8, enabled: true}
+    waist_pos_limits:   {weight: 15.0, enabled: true}
