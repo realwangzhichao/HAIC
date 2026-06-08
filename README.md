@@ -58,20 +58,12 @@ pip install -e .
 ```
 
 ## Verify Your Data
-Visualize motions in Isaac Sim with `+task.command.replay_motion=true`:
+Visualize motions in Isaac Sim with `task.command.replay_motion=true`:
 
 ```bash
-python scripts/play.py algo=ppo_haic_train task=G1/haic/skateboard +task.command.replay_motion=true
+python scripts/play.py algo=ppo_haic_train task=G1/haic/skateboard task.command.replay_motion=true
 ```
 
-Or visualize a `motion.npz` in MuJoCo:
-
-```bash
-# one terminal
-python scripts/vis/mujoco_mocap_viewer.py
-# another terminal
-python scripts/vis/motion_data_publisher.py <path-to-motion-folder>
-```
 
 ## Train and Evaluate
 
