@@ -57,6 +57,22 @@ cd HAIC
 pip install -e .
 ```
 
+## Verify Your Data
+Visualize motions in Isaac Sim with `+task.command.replay_motion=true`:
+
+```bash
+python scripts/play.py algo=ppo_haic_train task=G1/haic/skateboard +task.command.replay_motion=true
+```
+
+Or visualize a `motion.npz` in MuJoCo:
+
+```bash
+# one terminal
+python scripts/vis/mujoco_mocap_viewer.py
+# another terminal
+python scripts/vis/motion_data_publisher.py <path-to-motion-folder>
+```
+
 ## Train and Evaluate
 
 Teacher policy
@@ -76,6 +92,8 @@ python scripts/train.py algo=ppo_haic_finetune task=G1/haic/skateboard checkpoin
 # evaluate policy
 python scripts/play.py algo=ppo_haic_finetune task=G1/haic/skateboard checkpoint_path=run:<student_wandb-run-path>
 ```
+To export trained policies, add `export_policy=true` to the play script.
+
 
 ## Assets
 
