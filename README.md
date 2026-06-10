@@ -21,6 +21,7 @@ This repository hosts the open-source release for the RSS 2026 paper HAIC: Human
 
 - [2026-06-02] Release the asset module (`active_adaptation/assets`): the G1 robot USDs, the interaction object USDs, and the asset configuration code.
 - [2026-06-08] Initial public release: environment and task configurations, dynamics-aware world model, training code, and evaluation/play scripts.
+- [2026-06-10] Release MuJoCo Sim2Sim deployment code via the dedicated open-source repository [HOIC-baseline](https://github.com/Cybercal/HOIC-baseline) for real-world policy transfer.
 
 ## TODO
 
@@ -29,7 +30,7 @@ This repository hosts the open-source release for the RSS 2026 paper HAIC: Human
 - [x] Release the dynamics-aware world model implementation
 - [x] Release the training code
 - [x] Release the evaluation and play scripts
-- [ ] Release the sim-to-real deployment code
+- [x] Release the sim-to-sim deployment code
 - [ ] Provide setup instructions and usage documentation
 
 ## 🚀 Quick Start
@@ -86,6 +87,15 @@ python scripts/play.py algo=ppo_haic_finetune task=G1/haic/skateboard checkpoint
 ```
 To export trained policies, add `export_policy=true` to the play script.
 
+## 🤖 Sim2Sim Deployment (MuJoCo)
+
+We provide MuJoCo-based Sim2Sim deployment code to facilitate the transfer of agile humanoid object interaction policies from Isaac Sim to real-world platforms, whch is open-sourced at:
+* **GitHub:** [Cybercal/HOIC-baseline](https://github.com/Cybercal/HOIC-baseline)
+
+This repository includes:
+* **MuJoCo Simulation Environment:** A complete simulation setup tailored for humanoid-object interaction tasks.
+* **Deployment & Inference Pipeline:** Lightweight scripts supporting direct deployment and evaluation of pre-trained policy **ONNX** models.
+* **Sim2Sim Validation Tools:** Benchmarks and evaluation utilities to bridge the gap between Isaac Sim and real-world deployment.
 
 ## Assets
 
