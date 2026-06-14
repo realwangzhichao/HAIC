@@ -275,12 +275,15 @@ class SimpleEnv(_Env):
                 device=f"cuda:{active_adaptation.get_local_rank()}"
             )
             
-            # slightly reduces GPU memory usage
-            # sim_cfg.physx.gpu_max_rigid_contact_count = 2**21
-            # sim_cfg.physx.gpu_max_rigid_patch_count = 2**21
-            sim_cfg.physx.gpu_found_lost_pairs_capacity = 2538320*5 # 2**20
-            sim_cfg.physx.gpu_found_lost_aggregate_pairs_capacity = 61999079*4 + 2**24 # 2**26
-            sim_cfg.physx.gpu_total_aggregate_pairs_capacity = 2**23*5
+            # Keep PhysX GPU buffers configurable. The upstream defaults here are tuned
+            # for larger GPUs and can OOM on 12GB cards even with a single environment.
+            sim_cfg.physx.gpu_found_lost_pairs_capacity = self.cfg.sim.get("gpu_found_lost_pairs_capacity", 4_194_304)
+            sim_cfg.physx.gpu_found_lost_aggregate_pairs_capacity = self.cfg.sim.get(
+                "gpu_found_lost_aggregate_pairs_capacity", 33_554_432
+            )
+            sim_cfg.physx.gpu_total_aggregate_pairs_capacity = self.cfg.sim.get(
+                "gpu_total_aggregate_pairs_capacity", 4_194_304
+            )
             sim_cfg.physx.enable_stabilization = False
             # sim_cfg.physx.gpu_collision_stack_size = 2**25
             # sim_cfg.physx.gpu_heap_capacity = 2**24

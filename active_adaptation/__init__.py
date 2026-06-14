@@ -1,6 +1,14 @@
 import os
 import active_adaptation.learning
 
+try:
+    import isaaclab.utils.math as _isaaclab_math
+
+    if not hasattr(_isaaclab_math, "quat_apply_inverse"):
+        _isaaclab_math.quat_apply_inverse = _isaaclab_math.quat_rotate_inverse
+except Exception:
+    pass
+
 _BACKEND = "isaac"
 
 _LOCAL_RANK = os.getenv("LOCAL_RANK", "0")
